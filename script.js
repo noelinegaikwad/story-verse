@@ -1,424 +1,147 @@
-/**
- * STORY DATA
- */
-const stories = [
-    {
-        id: 'forest',
-        title: 'The Lost Forest',
-        genre: 'Mystery / Adventure',
-        description: 'You discover a mysterious path that leads deep into a forest no one remembers.',
-        image: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&q=80&w=800',
-        totalEndings: 5,
-        scenes: {
-            start: {
-                title: "The Whispering Pines",
-                text: "The edge of the Blackwood Forest loomed before you. Most villagers stay away, but today, you found a map tucked inside an old book. A glowing path of moss leads inward.",
-                image: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&q=80&w=800",
-                choices: [
-                    { text: "Follow the glowing moss", next: "glowing_path", stats: { courage: 1 } },
-                    { text: "Take the overgrown dirt trail", next: "dirt_trail", stats: { wisdom: 1 } }
-                ]
-            },
-            glowing_path: {
-                title: "The Bioluminescent Grove",
-                text: "The moss grows brighter, illuminating strange purple flowers. You hear a soft humming sound coming from a hollow tree. It feels magical, yet dangerous.",
-                image: "https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&q=80&w=800",
-                choices: [
-                    { text: "Investigate the hollow tree", next: "hollow_tree", stats: { luck: 1 } },
-                    { text: "Keep moving toward the light", next: "guardian_encounter", stats: { courage: 1 } }
-                ]
-            },
-            dirt_trail: {
-                title: "The Old Ruins",
-                text: "The dirt trail leads to a crumbling stone archway. Ancient symbols are etched into the stone. You feel as though you are being watched.",
-                image: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80&w=800",
-                choices: [
-                    { text: "Study the ancient symbols", next: "study_symbols", stats: { wisdom: 2 } },
-                    { text: "Hide in the shadows", next: "stranger_encounter", stats: { luck: 1 } }
-                ]
-            },
-            hollow_tree: {
-                title: "A Hidden Trap",
-                text: "As you reach into the tree, the ground beneath you gives way! You fall into a dark pit lined with soft silk. This isn't a tree; it's a nest.",
-                image: "https://images.unsplash.com/photo-1501167786227-4cba60f6d58f?auto=format&fit=crop&q=80&w=800",
-                choices: [
-                    { text: "Try to climb out quietly", next: "ending_lost", stats: { luck: -1 } },
-                    { text: "Use your flint to strike a light", next: "ending_escape", stats: { courage: 1 } }
-                ]
-            },
-            study_symbols: {
-                title: "Knowledge Found",
-                text: "The symbols describe a ritual to summon the forest's heart. You realize the forest isn't lost—it's hiding from the world. A secret door opens in the rock.",
-                image: "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&q=80&w=800",
-                choices: [
-                    { text: "Enter the Secret Kingdom", next: "ending_kingdom", stats: { wisdom: 2 } }
-                ]
-            },
-            guardian_encounter: {
-                title: "The Forest Guardian",
-                text: "A massive stag with antlers made of living wood blocks your path. Its eyes glow with ancient intelligence. It seems to be testing your spirit.",
-                image: "https://images.unsplash.com/photo-1484406566174-9da000fda645?auto=format&fit=crop&q=80&w=800",
-                choices: [
-                    { text: "Bow respectfully", next: "ending_guardian", stats: { wisdom: 2 } },
-                    { text: "Try to walk past", next: "ending_lost", stats: { courage: 1 } }
-                ]
-            },
-            stranger_encounter: {
-                title: "The Cloaked Figure",
-                text: "A mysterious stranger emerges from the mist. 'You shouldn't be here,' they whisper. 'But since you found the path, you have a choice to make.'",
-                image: "https://images.unsplash.com/photo-1509248961158-e54f6934749c?auto=format&fit=crop&q=80&w=800",
-                choices: [
-                    { text: "Ask for a way home", next: "ending_stranger" },
-                    { text: "Ask to see the truth", next: "ending_kingdom" }
-                ]
-            },
-            // ENDINGS
-            ending_guardian: {
-                type: "ending",
-                title: "The Forest Guardian",
-                text: "The stag lowers its head and touches your brow. You are granted the protection of the woods. You become the new protector of the Whispering Pines.",
-                description: "You chose respect and wisdom over force.",
-                image: "https://images.unsplash.com/photo-1484406566174-9da000fda645?auto=format&fit=crop&q=80&w=800"
-            },
-            ending_escape: {
-                type: "ending",
-                title: "The Hidden Escape",
-                text: "The light scares off the creatures in the pit. You find a side tunnel that leads back to the village. You're safe, but the forest remains a mystery.",
-                description: "You survived through quick thinking.",
-                image: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&q=80&w=800"
-            },
-            ending_stranger: {
-                type: "ending",
-                title: "The Mysterious Stranger",
-                text: "The stranger guides you to the edge of the woods. Before disappearing, they hand you a silver coin. 'For your next journey,' they say.",
-                description: "You met a legend and returned to tell the tale.",
-                image: "https://images.unsplash.com/photo-1509248961158-e54f6934749c?auto=format&fit=crop&q=80&w=800"
-            },
-            ending_lost: {
-                type: "ending",
-                title: "Lost Forever",
-                text: "The forest shifts and changes around you. No matter which way you turn, the trees look the same. You are now part of the forest's many legends.",
-                description: "The forest claimed another soul.",
-                image: "https://images.unsplash.com/photo-1425913397330-cf8af2ff40a1?auto=format&fit=crop&q=80&w=800"
-            },
-            ending_kingdom: {
-                type: "ending",
-                title: "The Secret Kingdom",
-                text: "You step through the portal into a city of gold and light. The ancient civilization didn't disappear; they just moved somewhere better.",
-                description: "You discovered a world beyond imagination.",
-                image: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80&w=800"
-            }
-        }
+const allStories = {
+    fantasy: {
+        start: { title: "The Stone Cell", text: "You wake up in a damp cell. A rusty door creaks, and a glowing rune shines on the wall.", choices: [{ text: "Inspect Rune", next: "magic" }, { text: "Kick Door", next: "combat" }] },
+        magic: { title: "The Arcane Path", text: "The rune teleports you to the Wizard's Tower. He offers you a staff.", choices: [{ text: "Accept Staff", next: "win_god" }, { text: "Refuse", next: "lose_void" }] },
+        combat: { title: "The Escape", text: "You break out and find a sword. A dragon guards the exit.", choices: [{ text: "Fight Dragon", next: "win_hero" }, { text: "Sneak Past", next: "lose_eaten" }] },
+        win_god: { title: "Ascended", text: "You became the new Archmage! (Ending 1/4)", choices: [] },
+        lose_void: { title: "Lost in Time", text: "Without magic, you drift into the void forever. (Ending 2/4)", choices: [] },
+        win_hero: { title: "Slayer", text: "You defeated the dragon and escaped! (Ending 3/4)", choices: [] },
+        lose_eaten: { title: "Crunch", text: "Dragons have excellent hearing. You're dinner. (Ending 4/4)", choices: [] }
     },
-    {
-        id: 'kingdom',
-        title: 'The Forgotten Kingdom',
-        genre: 'Fantasy',
-        description: 'An ancient map leads you toward a kingdom that disappeared hundreds of years ago.',
-        image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&q=80&w=800',
-        totalEndings: 3,
-        scenes: { start: { title: "Coming Soon", text: "This story is currently being written by the scribes...", choices: [] } }
+    scifi: {
+        start: { title: "Oxygen Low", text: "Alarms are blaring. The ship's AI asks for a command.", choices: [{ text: "Seal Leak", next: "repair" }, { text: "Eject Pod", next: "escape" }] },
+        repair: { title: "The Engine Room", text: "The core is unstable! You need to stabilize it.", choices: [{ text: "Override Manual", next: "win_ship" }, { text: "Call for Help", next: "lose_boom" }] },
+        escape: { title: "Dark Space", text: "Your pod is floating toward a strange nebula.", choices: [{ text: "Enter Nebula", next: "win_alien" }, { text: "Wait for Rescue", next: "lose_drift" }] },
+        win_ship: { title: "The Captain", text: "You saved the crew and the ship. (Ending 1/4)", choices: [] },
+        lose_boom: { title: "Stardust", text: "The help arrived too late. (Ending 2/4)", choices: [] },
+        win_alien: { title: "First Contact", text: "Aliens found you and shared their tech! (Ending 3/4)", choices: [] },
+        lose_drift: { title: "Cold Silence", text: "The batteries died before anyone found you. (Ending 4/4)", choices: [] }
     },
-    {
-        id: 'mars',
-        title: 'Mission: Mars',
-        genre: 'Sci-Fi',
-        description: 'Your spacecraft has detected an unexplained signal coming from the surface of Mars.',
-        image: 'https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?auto=format&fit=crop&q=80&w=800',
-        totalEndings: 4,
-        scenes: { start: { title: "Coming Soon", text: "Mission control is finalizing coordinates...", choices: [] } }
+    heist: {
+        start: { title: "The Vault", text: "You're in front of the world's strongest vault. Lasers are active.", choices: [{ text: "Use EMP", next: "tech" }, { text: "Hack Terminal", next: "cyber" }] },
+        tech: { title: "The Lobby", text: "The EMP worked, but guards are coming!", choices: [{ text: "Hide in Vent", next: "win_ghost" }, { text: "Flashbang", next: "lose_arrest" }] },
+        cyber: { title: "Cyberspace", text: "A security program is tracking your IP.", choices: [{ text: "Counter-Virus", next: "win_rich" }, { text: "Emergency Exit", next: "lose_fail" }] },
+        win_ghost: { title: "Ghost Thief", text: "You left with the gold and no one saw you. (Ending 1/4)", choices: [] },
+        lose_arrest: { title: "Handcuffed", text: "The flashbang blinded you too. Busted. (Ending 2/4)", choices: [] },
+        win_rich: { title: "Cyber King", text: "You drained their bank accounts remotely! (Ending 3/4)", choices: [] },
+        lose_fail: { title: "Empty Handed", text: "You got out safe, but without the loot. (Ending 4/4)", choices: [] }
+    },
+    horror: {
+        start: { title: "Rainy Manor", text: "You seek shelter in a mansion. The door locks behind you.", choices: [{ text: "Go Upstairs", next: "ghost" }, { text: "Go Basement", next: "killer" }] },
+        ghost: { title: "The Mirror", text: "A ghost appears in the mirror and offers a pact.", choices: [{ text: "Agree", next: "win_spirit" }, { text: "Run", next: "lose_fall" }] },
+        killer: { title: "The Workshop", text: "A man with a mask is sharpening a blade.", choices: [{ text: "Fight Back", next: "win_survive" }, { text: "Hide", next: "lose_found" }] },
+        win_spirit: { title: "Cursed Power", text: "You survived, but at a dark cost. (Ending 1/4)", choices: [] },
+        lose_fall: { title: "Darkness", text: "You tripped in the dark. (Ending 2/4)", choices: [] },
+        win_survive: { title: "Final Survivor", text: "You defeated the evil and escaped. (Ending 3/4)", choices: [] },
+        lose_found: { title: "The End", text: "There was nowhere to hide. (Ending 4/4)", choices: [] }
+    },
+    mystery: {
+        start: { title: "The Body", text: "The mansion owner is dead. Two people are in the room.", choices: [{ text: "Question Butler", next: "butler" }, { text: "Question Wife", next: "wife" }] },
+        butler: { title: "The Wine Cellar", text: "The butler is acting nervous near a hidden door.", choices: [{ text: "Enter Door", next: "win_solve" }, { text: "Accuse Him", next: "lose_wrong" }] },
+        wife: { title: "The Garden", text: "The wife is burning letters by the fountain.", choices: [{ text: "Grab Letters", next: "win_truth" }, { text: "Ignore Her", next: "lose_escape" }] },
+        win_solve: { title: "Great Detective", text: "You found the secret tunnel and the weapon! (Ending 1/4)", choices: [] },
+        lose_wrong: { title: "Mistake", text: "You lacked evidence. He sued you. (Ending 2/4)", choices: [] },
+        win_truth: { title: "Justice", text: "The letters proved her motive. (Ending 3/4)", choices: [] },
+        lose_escape: { title: "Cold Case", text: "The killer fled while you hesitated. (Ending 4/4)", choices: [] }
+    },
+    adventure: {
+        start: { title: "Temple Entrance", text: "A giant stone head guards the temple. It speaks a riddle.", choices: [{ text: "Solve Riddle", next: "inner" }, { text: "Find Secret Way", next: "cave" }] },
+        inner: { title: "Golden Room", text: "The idol is on a pressure plate.", choices: [{ text: "Swap with Bag", next: "win_idol" }, { text: "Just Grab It", next: "lose_rock" }] },
+        cave: { title: "The River", text: "An underground river leads deep into the earth.", choices: [{ text: "Swim", next: "win_city" }, { text: "Build Raft", next: "lose_water" }] },
+        win_idol: { title: "Legend", text: "You have the golden idol! (Ending 1/4)", choices: [] },
+        lose_rock: { title: "Crushed", text: "You are not Indiana Jones. (Ending 2/4)", choices: [] },
+        win_city: { title: "El Dorado", text: "You found the lost city of gold! (Ending 3/4)", choices: [] },
+        lose_water: { title: "Waterfall", text: "The raft broke over the edge. (Ending 4/4)", choices: [] }
+    },
+    survival: {
+        start: { title: "The Beach", text: "Your plane crashed. You're alone. Night is coming.", choices: [{ text: "Build Fire", next: "fire" }, { text: "Find Shelter", next: "shelter" }] },
+        fire: { title: "Smoke Signal", text: "The fire is huge, but it attracts a predator.", choices: [{ text: "Climb Tree", next: "win_rescue" }, { text: "Fight", next: "lose_wild" }] },
+        shelter: { title: "Dark Cave", text: "The cave is warm, but you're starving.", choices: [{ text: "Eat Berries", next: "win_native" }, { text: "Hunt Fish", next: "lose_hunger" }] },
+        win_rescue: { title: "Saved", text: "A plane saw the fire and you! (Ending 1/4)", choices: [] },
+        lose_wild: { title: "Prey", text: "The jungle is dangerous at night. (Ending 2/4)", choices: [] },
+        win_native: { title: "Adopted", text: "The island tribe found and helped you. (Ending 3/4)", choices: [] },
+        lose_hunger: { title: "Weakness", text: "Survival is harder than it looks. (Ending 4/4)", choices: [] }
+    },
+    time: {
+        start: { title: "The Rift", text: "The machine is glitching. Choose a destination.", choices: [{ text: "The Future", next: "future" }, { text: "The Past", next: "past" }] },
+        future: { title: "Year 3000", text: "Robots rule. They want to 'upgrade' you.", choices: [{ text: "Join Them", next: "win_bot" }, { text: "Resist", next: "lose_scrap" }] },
+        past: { title: "Ancient Rome", text: "You are in the middle of a gladiator arena.", choices: [{ text: "Fight for Honor", next: "win_emperor" }, { text: "Try to Explain", next: "lose_lion" }] },
+        win_bot: { title: "Immortal", text: "You are now a digital god. (Ending 1/4)", choices: [] },
+        lose_scrap: { title: "Recycled", text: "Rebels are weak in this timeline. (Ending 2/4)", choices: [] },
+        win_emperor: { title: "God King", text: "They think your phone is magic. (Ending 3/4)", choices: [] },
+        lose_lion: { title: "History", text: "Romans don't speak English. (Ending 4/4)", choices: [] }
     }
-];
-
-/**
- * APP STATE
- */
-let gameState = {
-    currentStory: null,
-    currentSceneId: 'start',
-    stats: { courage: 0, wisdom: 0, luck: 0 },
-    history: [],
-    unlockedEndings: {} // Format: { storyId: ['ending_id_1', 'ending_id_2'] }
 };
 
-/**
- * DOM ELEMENTS
- */
-const views = document.querySelectorAll('.view');
-const storyGrid = document.getElementById('story-grid');
-const collectionGrid = document.getElementById('collection-grid');
-const storyScreen = document.getElementById('story-screen');
-const choicesContainer = document.getElementById('choices-container');
-const sceneTitle = document.getElementById('scene-title');
-const sceneText = document.getElementById('scene-text');
-const sceneImage = document.getElementById('scene-image');
-const progressBar = document.getElementById('progress-bar');
-const sceneCounter = document.getElementById('scene-counter');
-const statsDisplay = document.getElementById('stats-display');
-const choiceHistoryList = document.getElementById('choice-history');
+let currentStory = null;
+let historyLog = [];
 
-/**
- * INITIALIZATION
- */
-function init() {
-    loadGlobalProgress();
-    renderLibrary();
-    setupEventListeners();
+function startStory(storyKey) {
+    currentStory = storyKey;
+    historyLog = [];
+    document.getElementById('story-menu').style.display = 'none';
+    document.getElementById('gameplay-area').style.display = 'grid';
+    document.getElementById('progressWrapper').style.display = 'block';
+    document.getElementById('sub-title').innerText = "Your story is unfolding...";
     
-    // Check if user has an active story session
-    const savedSession = localStorage.getItem('storyVerse_activeSession');
-    if (savedSession) {
-        gameState = JSON.parse(savedSession);
-        // We only resume if they were actually in a story
-        if (gameState.currentStory) {
-            startStory(gameState.currentStory.id, false);
-        }
-    }
+    updateHistoryUI();
+    renderScene("start");
 }
 
-function setupEventListeners() {
-    document.getElementById('mobile-menu').addEventListener('click', () => {
-        document.querySelector('.nav-links').classList.toggle('active');
-    });
-}
-
-/**
- * NAVIGATION LOGIC
- */
-function showSection(sectionId) {
-    views.forEach(view => {
-        view.classList.add('hidden');
-        if (view.id === sectionId) view.classList.remove('hidden');
-    });
+function renderScene(sceneKey) {
+    const scene = allStories[currentStory][sceneKey];
+    const container = document.getElementById('choices-container');
     
-    if (sectionId === 'collection') renderCollection();
-    window.scrollTo(0, 0);
-}
-
-/**
- * LIBRARY LOGIC
- */
-function renderLibrary() {
-    storyGrid.innerHTML = '';
-    stories.forEach(story => {
-        const card = document.createElement('div');
-        card.className = 'story-card';
-        card.innerHTML = `
-            <div class="card-img" style="background-image: url('${story.image}')"></div>
-            <div class="card-body">
-                <span class="genre-tag">${story.genre}</span>
-                <h3>${story.title}</h3>
-                <p>${story.description}</p>
-                <div style="margin-top:15px; display:flex; justify-content:space-between; align-items:center;">
-                    <small>${story.totalEndings} Endings</small>
-                    <button class="btn btn-primary" onclick="startStory('${story.id}')">Start Story</button>
-                </div>
-            </div>
-        `;
-        storyGrid.appendChild(card);
-    });
-}
-
-/**
- * STORY ENGINE LOGIC
- */
-function startStory(storyId, isNew = true) {
-    const story = stories.find(s => s.id === storyId);
-    if (!story) return;
-
-    if (isNew) {
-        gameState.currentStory = story;
-        gameState.currentSceneId = 'start';
-        gameState.stats = { courage: 0, wisdom: 0, luck: 0 };
-        gameState.history = [];
-    }
-
-    document.getElementById('current-story-title').innerText = story.title;
-    showSection('story-screen');
-    loadScene(gameState.currentSceneId);
-}
-
-function loadScene(sceneId) {
-    const story = gameState.currentStory;
-    const scene = story.scenes[sceneId];
-
-    if (!scene) {
-        console.error("Scene not found:", sceneId);
-        return;
-    }
-
-    // Update UI
-    sceneTitle.innerText = scene.title;
-    sceneText.innerText = scene.text;
-    sceneImage.style.backgroundImage = `url('${scene.image}')`;
+    // Update Text
+    document.getElementById('scene-title').innerText = scene.title;
+    document.getElementById('story-text').innerText = scene.text;
     
-    // Smooth transition effect
-    sceneImage.parentElement.style.opacity = 0;
-    setTimeout(() => { sceneImage.parentElement.style.opacity = 1; }, 50);
+    // Update Progress
+    const progress = (historyLog.length / 3) * 100;
+    document.getElementById('progressBar').style.width = `${Math.min(progress, 100)}%`;
 
-    // Render Stats
-    renderStats();
+    // Clear Choices
+    container.innerHTML = "";
 
-    // Render Choices
-    choicesContainer.innerHTML = '';
-    if (scene.type === 'ending') {
-        showEnding(scene);
+    if (scene.choices.length === 0) {
+        // Ending State
+        const restartBtn = document.createElement('button');
+        restartBtn.innerText = "Play Again";
+        restartBtn.style.borderColor = "var(--success)";
+        restartBtn.onclick = () => startStory(currentStory);
+        container.appendChild(restartBtn);
     } else {
+        // Choice State
         scene.choices.forEach(choice => {
             const btn = document.createElement('button');
-            btn.className = 'btn btn-choice';
             btn.innerText = choice.text;
-            btn.onclick = () => makeChoice(choice);
-            choicesContainer.appendChild(btn);
+            btn.onclick = () => {
+                historyLog.push(choice.text);
+                updateHistoryUI();
+                renderScene(choice.next);
+            };
+            container.appendChild(btn);
         });
     }
-
-    updateProgressUI();
-    saveActiveSession();
 }
 
-function makeChoice(choice) {
-    // Update Stats
-    if (choice.stats) {
-        for (let stat in choice.stats) {
-            gameState.stats[stat] += choice.stats[stat];
-        }
+function updateHistoryUI() {
+    const list = document.getElementById('history-list');
+    list.innerHTML = "";
+    if (historyLog.length === 0) {
+        list.innerHTML = "<li>No choices made yet.</li>";
     }
-
-    // Update History
-    gameState.history.push(choice.text);
-    renderHistory();
-
-    // Move to next scene
-    gameState.currentSceneId = choice.next;
-    loadScene(choice.next);
-}
-
-function renderStats() {
-    statsDisplay.innerHTML = `
-        <span>Courage: ${'⭐'.repeat(Math.max(0, gameState.stats.courage))}</span>
-        <span>Wisdom: ${'⭐'.repeat(Math.max(0, gameState.stats.wisdom))}</span>
-    `;
-}
-
-function renderHistory() {
-    choiceHistoryList.innerHTML = '';
-    gameState.history.slice(-3).forEach(item => {
+    historyLog.forEach((choice, index) => {
         const li = document.createElement('li');
-        li.innerText = item;
-        choiceHistoryList.appendChild(li);
+        li.innerText = `${index + 1}. ${choice}`;
+        list.appendChild(li);
     });
 }
 
-function updateProgressUI() {
-    const historyLen = gameState.history.length;
-    const progress = Math.min((historyLen / 8) * 100, 100);
-    progressBar.style.width = `${progress}%`;
-    sceneCounter.innerText = `Scene ${historyLen + 1}`;
+function quitToMenu() {
+    document.getElementById('story-menu').style.display = 'grid';
+    document.getElementById('gameplay-area').style.display = 'none';
+    document.getElementById('progressWrapper').style.display = 'none';
+    document.getElementById('sub-title').innerText = "Select an adventure to begin your journey";
+    document.getElementById('progressBar').style.width = "0%";
 }
-
-/**
- * ENDING LOGIC
- */
-function showEnding(scene) {
-    showSection('ending-screen');
-    document.getElementById('ending-title').innerText = scene.title;
-    document.getElementById('ending-description').innerText = scene.description;
-
-    // Save Unlocked Ending
-    const storyId = gameState.currentStory.id;
-    if (!gameState.unlockedEndings[storyId]) {
-        gameState.unlockedEndings[storyId] = [];
-    }
-    if (!gameState.unlockedEndings[storyId].includes(gameState.currentSceneId)) {
-        gameState.unlockedEndings[storyId].push(gameState.currentSceneId);
-    }
-    
-    // Clear active session since story is over
-    localStorage.removeItem('storyVerse_activeSession');
-    saveGlobalProgress();
-}
-
-function restartCurrentStory() {
-    startStory(gameState.currentStory.id, true);
-}
-
-function confirmRestart() {
-    if (confirm("Are you sure you want to restart? Your current progress will be lost.")) {
-        restartCurrentStory();
-    }
-}
-
-/**
- * COLLECTION / ACHIEVEMENTS
- */
-function renderCollection() {
-    collectionGrid.innerHTML = '';
-    let totalFound = 0;
-    let totalPossible = 0;
-
-    stories.forEach(story => {
-        const storyEndings = gameState.unlockedEndings[story.id] || [];
-        totalFound += storyEndings.length;
-        totalPossible += story.totalEndings;
-
-        // Create a header for the story
-        const storySection = document.createElement('div');
-        storySection.className = 'collection-story-group';
-        storySection.style.gridColumn = "1 / -1";
-        storySection.innerHTML = `<h3>${story.title} (${storyEndings.length}/${story.totalEndings})</h3>`;
-        collectionGrid.appendChild(storySection);
-
-        // Show discovered endings as cards
-        for (let i = 0; i < story.totalEndings; i++) {
-            const isUnlocked = storyEndings[i] !== undefined;
-            const endingId = storyEndings[i];
-            const endingData = isUnlocked ? story.scenes[endingId] : null;
-
-            const item = document.createElement('div');
-            item.className = `feature-card ${isUnlocked ? '' : 'locked'}`;
-            item.style.opacity = isUnlocked ? '1' : '0.4';
-            item.innerHTML = `
-                <div class="icon">${isUnlocked ? '🔓' : '🔒'}</div>
-                <h4>${isUnlocked ? endingData.title : '???'}</h4>
-                <p>${isUnlocked ? endingData.description : 'Ending not yet discovered.'}</p>
-            `;
-            collectionGrid.appendChild(item);
-        }
-    });
-
-    document.getElementById('completion-stats').innerText = `${totalFound} / ${totalPossible} Endings Discovered`;
-}
-
-/**
- * LOCAL STORAGE HELPERS
- */
-function saveActiveSession() {
-    localStorage.setItem('storyVerse_activeSession', JSON.stringify(gameState));
-}
-
-function saveGlobalProgress() {
-    localStorage.setItem('storyVerse_unlockedEndings', JSON.stringify(gameState.unlockedEndings));
-}
-
-function loadGlobalProgress() {
-    const saved = localStorage.getItem('storyVerse_unlockedEndings');
-    if (saved) {
-        gameState.unlockedEndings = JSON.parse(saved);
-    }
-}
-
-/**
- * MODAL LOGIC
- */
-function openModal() { document.getElementById('how-modal').style.display = 'block'; }
-function closeModal() { document.getElementById('how-modal').style.display = 'none'; }
-
-// Close modal when clicking outside
-window.onclick = function(event) {
-    const modal = document.getElementById('how-modal');
-    if (event.target == modal) closeModal();
-}
-
-// Start the app
-init();
